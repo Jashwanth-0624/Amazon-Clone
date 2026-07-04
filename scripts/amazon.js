@@ -1,3 +1,5 @@
+import {cart} from '../data/cart.js';
+
 let productsHTML = '';
 
 products.forEach((product) => {
@@ -91,3 +93,4 @@ document.querySelectorAll('.js-addtocart')
     });
   });
   
+ 
