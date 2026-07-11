@@ -4,12 +4,7 @@ import {formatCurrency} from '../utils/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 import {deliveryOptions, getDeliveryOption} from '../../data/deliveryOptions.js';
-
-hello();
-
-const today = dayjs();
-const delDate = today.add(7, 'days');
-console.log(delDate.format('dddd, MMMM D'));
+import {renderPaymentSumm} from './paymentSumm.js'
 
 export function renderOrderSumm(){
 
@@ -132,6 +127,8 @@ export function renderOrderSumm(){
           `.js-cart-item-container-${productId}`
         );
         container.remove();
+
+        renderPaymentSumm();
         
       });
     });
@@ -142,6 +139,7 @@ export function renderOrderSumm(){
         const {productId, deliveryOptionId} = element.dataset;
         updateDeliveryOption(productId, deliveryOptionId);
         renderOrderSumm();
+        renderPaymentSumm();
       });
       
     });
