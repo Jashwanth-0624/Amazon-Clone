@@ -68,3 +68,15 @@ function saveToStorage(){
       saveToStorage();
 
   } 
+
+export function loadCart(fun){
+  const xhr = new XMLHttpRequest()
+
+  xhr.addEventListener('load', () => {
+    console.log(xhr.response);
+    fun(); 
+  });
+
+  xhr.open('GET', 'https://supersimplebackend.dev/cart');
+  xhr.send();
+}
