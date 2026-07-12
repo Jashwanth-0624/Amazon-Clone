@@ -65,12 +65,12 @@ const object2 = {
   b: this.a
 };*/
 
-function logThis(){
-  console.log(this);
-}
-logThis();
+// function logThis(){
+//   console.log(this);
+// }
+// logThis();
 
-logThis.call('Hello');
+// logThis.call('Hello');
 
 
 
