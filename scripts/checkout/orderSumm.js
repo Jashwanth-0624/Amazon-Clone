@@ -126,7 +126,10 @@ export function renderOrderSumm(){
         const productId = link.dataset.productId;
         removeFromCart(productId);
 
-        renderOrderSummary();
+        const container = document.querySelector(
+          `.js-cart-item-container-${productId}`
+        );
+        container.remove();
 
         renderPaymentSumm();
         
