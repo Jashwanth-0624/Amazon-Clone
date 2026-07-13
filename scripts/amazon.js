@@ -3,6 +3,7 @@ import {products, loadProducts} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
 
 loadProducts(renderProductsGrid);
+updatecartQ();
 
 function renderProductsGrid(){
 
@@ -33,7 +34,7 @@ function renderProductsGrid(){
             </div>
 
             <div class="product-quantity-container">
-              <select>
+              <select class="js-quantity-selector-${product.id}">
                 <option selected value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -69,7 +70,30 @@ function renderProductsGrid(){
   document.querySelector('.js-products-grid').
     innerHTML = productsHTML;
 
-    function updatecartQ(){
+  document.querySelectorAll('.js-addtocart')
+    .forEach((button) => {
+      button.addEventListener('click', () => {
+        const productId = button.dataset.productId;
+
+        const quantitySelector = document.querySelector(
+        `.js-quantity-selector-${productId}`
+        );
+
+      const quantity = Number(quantitySelector.value);
+
+        const added = addtocart(productId, quantity);
+
+        if (!added) {
+          alert('Maximum quantity is 10');
+          return;
+        }
+
+        updatecartQ();
+        });
+  });
+}
+
+function updatecartQ(){
       let cartQuantity = 0;
 
       cart.forEach((cartItem) => {
@@ -78,15 +102,5 @@ function renderProductsGrid(){
       document.querySelector('.js-cartQ')
           .innerHTML = cartQuantity;
     }
-
-  document.querySelectorAll('.js-addtocart')
-    .forEach((button) => {
-      button.addEventListener('click', () => {
-        const productId = button.dataset.productId;
-        addtocart(productId);
-        updatecartQ();
-      });
-  });
-}
   
  

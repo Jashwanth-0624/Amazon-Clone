@@ -1,4 +1,4 @@
-import {cart, removeFromCart, updateDeliveryOption} from '../../data/cart.js';
+import {cart, removeFromCart, updateDeliveryOption, updateQuantity} from '../../data/cart.js';
 import {products, getProduct} from '../../data/products.js';
 import {formatCurrency} from '../utils/money.js';
 import {hello} from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
@@ -51,11 +51,21 @@ export function renderOrderSumm(){
                     ${matchingProduct.getPrice()}
                   </div>
                   <div class="product-quantity js-product-quantity-${matchingProduct.id}">
+                  <div class="quantity-error js-quantity-error-${matchingProduct.id}"></div>
                     <span>
-                      Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+                      Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}
                     </span>
-                    <span class="update-quantity-link link-primary">
+                    <span
+                      class="update-quantity-link link-primary js-update-link"
+                      data-product-id="${matchingProduct.id}"
+                      data-quantity="${cartItem.quantity}">
                       Update
+                  </span>
+                    <input type="number" min="0" max="10" class="quantity-input js-quantity-input-${matchingProduct.id}"
+                      data-product-id="${matchingProduct.id}">
+                    <span class="save-quantity-link link-primary js-save-link"
+                      data-product-id="${matchingProduct.id}">
+                        Save
                     </span>
                     <span class="delete-quantity-link link-primary js-delete-link
                      js-delete-link-${matchingProduct.id}"
@@ -149,4 +159,76 @@ export function renderOrderSumm(){
       });
       
     });
+
+    document.querySelectorAll('.js-update-link')
+    .forEach((link) => {
+      link.addEventListener('click', () => {
+        const productId = link.dataset.productId;
+
+        const container = document.querySelector(
+          `.js-cart-item-container-${productId}`
+        );
+        container.classList.add('is-editing-quantity');
+
+        const quantityInput = document.querySelector(
+        `.js-quantity-input-${productId}`
+        );
+
+        quantityInput.value = link.dataset.quantity;
+      });
+    });
+
+  document.querySelectorAll('.js-save-link')
+    .forEach((link) => {
+      link.addEventListener('click', () => {
+        const productId = link.dataset.productId;
+
+        const container = document.querySelector(
+          `.js-cart-item-container-${productId}`
+        );
+        container.classList.remove('is-editing-quantity');
+
+        const quantityInput = document.querySelector(
+          `.js-quantity-input-${productId}`
+        );
+        const newQuantity = Number(quantityInput.value);
+          const errorElement = document.querySelector(
+          `.js-quantity-error-${productId}`
+          );
+
+        errorElement.innerHTML = '';
+
+        if (newQuantity === 0) {
+          removeFromCart(productId);
+
+          renderCheckoutHeader();
+          renderOrderSumm();
+          renderPaymentSumm();
+          return;
+        }
+
+        if (newQuantity > 10) {
+          errorElement.innerHTML = 'Maximum quantity is 10.';
+          return;
+        }
+        updateQuantity(productId, newQuantity);
+
+        renderCheckoutHeader();
+        renderOrderSumm();
+        renderPaymentSumm();
+      });
+  });
+
+  document.querySelectorAll('.quantity-input')
+  .forEach((input) => {
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        const productId = input.dataset.productId;
+
+        document.querySelector(
+          `.js-save-link[data-product-id="${productId}"]`
+        ).click();
+      }
+    });
+  });
 }

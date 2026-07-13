@@ -101,3 +101,12 @@
     width: auto;
   }
 }
+
+.return-to-home-link {
+  color: rgb(0, 113, 133);
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}

@@ -24,25 +24,32 @@ function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-  export function addtocart(productId){
-    let matchingItem;
-      cart.forEach((cartItem) => {
-        if(productId === cartItem.productId){
-          matchingItem = cartItem;
-        }
-      });
-      if(matchingItem){
-        matchingItem.quantity += 1;
-      }
-      else{
-        cart.push({
-        productId: productId,
-        quantity: 1,
-        deliveryOptionId: '1'
-       });
-      }
-      saveToStorage();
+  export function addtocart(productId, quantity) {
+  let matchingItem;
+
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  if (matchingItem) {
+    if (matchingItem.quantity + quantity > 10) {
+      return false;
+    }
+
+    matchingItem.quantity += quantity;
+  } else {
+    cart.push({
+      productId,
+      quantity: quantity,
+      deliveryOptionId: '1'
+    });
   }
+
+  saveToStorage();
+  return true;
+}
 
   export function removeFromCart(productId) {
     const newCart = []
@@ -68,6 +75,20 @@ function saveToStorage(){
       saveToStorage();
 
   } 
+
+  export function updateQuantity(productId, newQuantity) {
+  let matchingItem;
+
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  matchingItem.quantity = newQuantity;
+
+  saveToStorage();
+}
 
 export function loadCart(fun){
   const xhr = new XMLHttpRequest()
