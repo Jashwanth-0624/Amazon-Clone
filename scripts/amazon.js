@@ -1,4 +1,4 @@
-import {cart, addtocart} from '../data/cart.js';
+import {cart, addtocart, resetCart} from '../data/cart.js';
 import {products, loadProducts} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
 
@@ -119,6 +119,14 @@ function renderProductsGrid(){
     .addEventListener('click', () => {
       const search = document.querySelector('.js-search-bar').value;
       window.location.href = `amazon.html?search=${search}`;
+    });
+
+      document.querySelector('.js-search-bar')
+      .addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          const searchTerm = document.querySelector('.js-search-bar').value;
+          window.location.href = `amazon.html?search=${searchTerm}`;
+        }
     });
 }
 

@@ -84,7 +84,7 @@ export function renderPaymentSumm(){
         }catch (error) {
           console.log('Unexpected error. Please try again later');
         }
-
+        resetCart();
         window.location.href = 'orders.html'
         
       });
