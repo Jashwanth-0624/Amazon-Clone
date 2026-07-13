@@ -6,9 +6,7 @@ Thank you for stopping by! This project is a fully functional front-end Amazon C
 
 I developed this project completely from scratch to strengthen my understanding of modern JavaScript and front-end application development. Throughout this project, I explored concepts such as asynchronous programming, API integration, modular architecture, DOM manipulation, state management, and software testing while following clean coding practices.
 
-👉 **Live Demo:** https://jashwanth-0624.github.io/Amazon-Clone/
-
-**⚠️ Important Note:** Since this project closely replicates Amazon's interface, **Google Safe Browsing** may occasionally flag the GitHub Pages site as a potential phishing page. This is a common false positive for educational clone projects. If you encounter the warning, click **Details** and then click the underlined **"visit this unsafe site"** text to continue to the demo.
+👉 **Live Demo:** https://amazon-clone-iota-steel.vercel.app/
 
 ---
 
