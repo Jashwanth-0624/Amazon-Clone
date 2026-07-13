@@ -1,4 +1,4 @@
-import {cart, addtocart, resetCart} from '../data/cart.js';
+import {cart, addtocart} from '../data/cart.js';
 import {products, loadProducts} from '../data/products.js';
 import {formatCurrency} from './utils/money.js';
 
@@ -130,7 +130,7 @@ function renderProductsGrid(){
     });
 }
 
-function updatecartQ(){
+export function updatecartQ(){
       let cartQuantity = 0;
 
       cart.forEach((cartItem) => {

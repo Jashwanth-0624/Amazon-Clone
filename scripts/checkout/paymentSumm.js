@@ -1,4 +1,4 @@
-import {cart} from '../../data/cart.js';
+import {cart, resetCart} from '../../data/cart.js';
 import {getProduct} from '../../data/products.js';
 import {getDeliveryOption} from '../../data/deliveryOptions.js'
 import {formatCurrency} from '../utils/money.js';
@@ -65,27 +65,32 @@ export function renderPaymentSumm(){
   document.querySelector('.js-payment-summ')
     .innerHTML = paymentSummHTML;
 
-    document.querySelector('.js-place-order')
-      .addEventListener('click', async () => {
-        try {
-          const response = await fetch('https://supersimplebackend.dev/orders', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              cart: cart
-            })
-          });
-
-          const order = await response.json()
-          addOrder(order);
-
-        }catch (error) {
-          console.log('Unexpected error. Please try again later');
-        }
-        resetCart();
-        window.location.href = 'orders.html'
-        
+document.querySelector('.js-place-order')
+  .addEventListener('click', async () => {
+    try {
+      const response = await fetch('https://supersimplebackend.dev/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          cart: cart
+        })
       });
+
+      const order = await response.json();
+
+      if (!response.ok) {
+        throw new Error(order.errorMessage);
+      }
+
+      addOrder(order);
+
+      resetCart();
+      window.location.href = 'orders.html';
+
+    } catch (error) {
+      alert(error.message);
+    }
+  });
 }

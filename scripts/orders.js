@@ -2,7 +2,9 @@ import {getProduct, loadProductsFetch} from '../data/products.js';
 import {orders} from '../data/orders.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import formatCurrency from './utils/money.js';
-import {addToCart} from '../data/cart.js';
+import {addtocart, cart} from '../data/cart.js';
+
+updateCartQ();
 
 async function loadPage() {
   await loadProductsFetch();
@@ -38,51 +40,57 @@ async function loadPage() {
   });
 
   function productsListHTML(order) {
-    let productsListHTML = '';
 
-    order.products.forEach((productDetails) => {
-      const product = getProduct(productDetails.productId);
-
-      productsListHTML += `
-        <div class="product-image-container">
-          <img src="${product.image}">
-        </div>
-        <div class="product-details">
-          <div class="product-name">
-            ${product.name}
-          </div>
-          <div class="product-delivery-date">
-            Arriving on: ${
-              dayjs(productDetails.estimatedDeliveryTime).format('MMMM D')
-            }
-          </div>
-          <div class="product-quantity">
-            Quantity: ${productDetails.quantity}
-          </div>
-          <button class="buy-again-button button-primary js-buy-again"
-            data-product-id="${product.id}">
-            <img class="buy-again-icon" src="images/icons/buy-again.png">
-            <span class="buy-again-message">Buy it again</span>
-          </button>
-        </div>
-        <div class="product-actions">
-          <a href="tracking.html?orderId=${order.id}&productId=${product.id}">
-            <button class="track-package-button button-secondary">
-              Track package
-            </button>
-          </a>
-        </div>
-      `;
-    });
-
-    return productsListHTML;
+  if (!order.products) {
+    console.error('Invalid order:', order);
+    return '';
   }
+
+  let productsListHTML = '';
+
+  order.products.forEach((productDetails) => {
+    const product = getProduct(productDetails.productId);
+
+    productsListHTML += `
+      <div class="product-image-container">
+        <img src="${product.image}">
+      </div>
+      <div class="product-details">
+        <div class="product-name">
+          ${product.name}
+        </div>
+        <div class="product-delivery-date">
+          Arriving on: ${
+            dayjs(productDetails.estimatedDeliveryTime).format('MMMM D')
+          }
+        </div>
+        <div class="product-quantity">
+          Quantity: ${productDetails.quantity}
+        </div>
+        <button class="buy-again-button button-primary js-buy-again"
+          data-product-id="${product.id}">
+          <img class="buy-again-icon" src="images/icons/buy-again.png">
+          <span class="buy-again-message">Buy it again</span>
+        </button>
+      </div>
+      <div class="product-actions">
+        <a href="tracking.html?orderId=${order.id}&productId=${product.id}">
+          <button class="track-package-button button-secondary">
+            Track package
+          </button>
+        </a>
+      </div>
+    `;
+  });
+
+  return productsListHTML;
+}
 
   document.querySelector('.js-orders-grid').innerHTML = ordersHTML;
 
   document.querySelectorAll('.js-buy-again').forEach((button) => {
     button.addEventListener('click', () => {
-      addToCart(button.dataset.productId);
+      addtocart(button.dataset.productId, 1);
 
       // (Optional) display a message that the product was added,
       // then change it back after a second.
@@ -95,6 +103,17 @@ async function loadPage() {
       }, 1000);
     });
   });
+  updateCartQ();
 }
 
 loadPage();
+
+function updateCartQ() {
+  let cartQuantity = 0;
+
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  document.querySelector('.js-cartQ').innerHTML = cartQuantity;
+}
